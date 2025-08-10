@@ -1,7 +1,7 @@
 "use client";
 
-import FetchGrades from "../components/FetchGrades";
+import MoutamadrisApp from "../components/MoutamadrisApp";
 
 export default function Home() {
-  return <FetchGrades />;
+  return <MoutamadrisApp />;
 }
