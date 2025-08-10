@@ -4,32 +4,27 @@ import { createAuthenticatedClient, getStandardHeaders } from '../../src/utils/m
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { username, password, semester, year } = req.body;
-  if (!username || !password || !semester || !year) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
     const { client } = await createAuthenticatedClient(username, password);
 
-    const gradesPayload = new URLSearchParams({
-      Annee: year.split('/')[0],
-      IdSession: semester
-    }).toString();
-
-    const gradesRes = await client.post(
-      'https://massarservice.men.gov.ma/moutamadris/TuteurEleves/GetBulletins',
-      gradesPayload,
+    // Try to get student information from the main student page
+    const studentInfoRes = await client.get(
+      'https://massarservice.men.gov.ma/moutamadris/TuteurEleves',
       {
         headers: getStandardHeaders()
       }
     );
 
-    if (!gradesRes.data || !gradesRes.data.includes('Classe')) {
-      return res.status(500).json({ error: 'Could not fetch grades', details: gradesRes.data });
+    if (!studentInfoRes.data) {
+      return res.status(500).json({ error: 'Could not fetch student information' });
     }
 
-    res.json({ rawHTML: gradesRes.data });
+    res.json({ rawHTML: studentInfoRes.data });
   } catch (error: any) {
     console.error('API error:', error);
     if (error.message === 'Login failed') {
