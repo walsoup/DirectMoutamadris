@@ -105,7 +105,7 @@ const AnnouncementsTab: React.FC<AnnouncementsTabProps> = ({ credentials }) => {
 
       {announcements.length === 0 && !loading && !error && (
         <Alert severity="info">
-          No announcements found. Click "Fetch Announcements" to load data.
+          No announcements found. Click &ldquo;Fetch Announcements&rdquo; to load data.
         </Alert>
       )}
       

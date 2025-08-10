@@ -4,7 +4,7 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 
 export interface AuthenticatedClient {
-  client: any;
+  client: import('axios').AxiosInstance;
   authenticated: boolean;
 }
 
@@ -12,7 +12,7 @@ export async function createAuthenticatedClient(username: string, password: stri
   const jar = new CookieJar();
   // Use proxy only on Vercel (production)
   const isVercel = !!process.env.VERCEL;
-  const axiosConfig: any = { jar, timeout: 15000 };
+  const axiosConfig: import('axios').AxiosRequestConfig = { jar, timeout: 15000 };
   if (isVercel) {
     axiosConfig.proxy = {
       host: '196.115.252.173',
@@ -59,7 +59,10 @@ export async function createAuthenticatedClient(username: string, password: stri
     await client.post('https://massarservice.men.gov.ma/moutamadris/General/SetCulture?culture=en', null);
 
     return { client, authenticated: true };
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'ENOTFOUND' && error.hostname === 'massarservice.men.gov.ma') {
+      throw new Error('Cannot connect to MoutaMadris service. This application only works from Morocco due to geo-restrictions.');
+    }
     throw error;
   }
 }

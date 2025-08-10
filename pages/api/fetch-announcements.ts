@@ -29,6 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('API error:', error);
     if (error.message === 'Login failed') {
       res.status(401).json({ error: 'Login failed' });
+    } else if (error.message.includes('Cannot connect to MoutaMadris service')) {
+      res.status(503).json({ error: 'Service unavailable: This application only works from Morocco due to geo-restrictions.' });
+    } else if (error.code === 'ENOTFOUND') {
+      res.status(503).json({ error: 'Network error: Cannot connect to MoutaMadris service. Please check your internet connection or try again later.' });
     } else {
       res.status(500).json({ error: 'Something went wrong', details: error?.message });
     }

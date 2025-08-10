@@ -16,9 +16,6 @@ import {
   ThemeProvider,
   Tab,
   Tabs,
-  Card,
-  CardContent,
-  Grid,
 } from '@mui/material';
 import { teal, blue } from '@mui/material/colors';
 import axios from 'axios';
@@ -115,6 +112,8 @@ const MoutamadrisApp: React.FC = () => {
     } catch (err: any) {
       if (err.response?.data?.error === 'Login failed') {
         setError('Incorrect Massar code or password. Please try again.');
+      } else if (err.response?.status === 503) {
+        setError(err.response?.data?.error || 'Service temporarily unavailable');
       } else {
         setError(err.response?.data?.error || 'Authentication failed');
       }

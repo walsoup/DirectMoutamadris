@@ -7,7 +7,6 @@ import {
   Alert,
   Card,
   CardContent,
-  Paper,
 } from '@mui/material';
 import axios from 'axios';
 import { parseStudentInfo } from '../utils/parseAdditionalData';

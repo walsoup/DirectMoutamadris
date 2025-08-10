@@ -127,7 +127,7 @@ const HomeworkTab: React.FC<HomeworkTabProps> = ({ credentials }) => {
 
       {homework.length === 0 && !loading && !error && (
         <Alert severity="info">
-          No homework found. Click "Fetch Homework" to load data.
+          No homework found. Click &ldquo;Fetch Homework&rdquo; to load data.
         </Alert>
       )}
       
